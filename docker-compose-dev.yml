@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  moviedb:
+    image: mongo:4.2.6
+    container_name: moviedb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: moviedb
+    ports:
+      - 27017:27017
+    volumes:
+      - ./dockerITimage/mongo-ci-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro

@@ -1,0 +1,54 @@
+image: openjdk:11.0.6-jdk
+
+stages:
+  - build
+  - unit_test
+  - IT_test
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  CI: "true"
+
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+  - chmod +x gradlew
+
+build:
+  stage: build
+  script:
+    - ./gradlew assemble
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1 hour
+  only:
+    - main
+
+unit_test:
+  stage: unit_test
+  script:
+    - ./gradlew :test --tests "fr.slickteam.gitlabciittests.**Test"
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - build/reports
+    expire_in: 60 days
+    reports:
+      junit: build/test-results/test/TEST-*.xml
+
+
+IT_test:
+  stage: IT_test
+  services:
+    - name: YOUR_REPO/gitlabciittests-mongo-testing:latest
+      alias: mongo
+  script:
+    - ./gradlew :test --tests "fr.slickteam.gitlabciittests.**TestIT"
+  allow_failure: true
+  timeout: 10m
+  artifacts:
+    when: always
+    expire_in: 60 days
+    reports:
+      junit: build/test-results/test/TEST-*.xml

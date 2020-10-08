@@ -1,0 +1,19 @@
+image: docker:latest
+
+stages:
+  - build
+  - push_image
+
+before_script:
+  - docker info
+  - docker login -u YOUR_REPO_USER -p YOUR_REPO_PASSWORD YOUR_REPO_HOST
+
+build:
+  stage: build
+  script:
+    - docker build -t YOUR_NEXUS/gitlabciittests-mongo-testing:latest .
+
+push_image:
+  stage: push_image
+  script:
+    - docker push YOUR_NEXUS/gitlabciittests-mongo-testing:latest
