@@ -1,13 +1,13 @@
-# gitlab-ci_IT-tests
+# gitlab-ci_dev_testing
 
-Runnning IT tests on Gitlab-CI
+Runnning tests on Gitlab-CI
 
 
 # Purpose   
 
 This project is an example of how we manage IT test on Gitlab-CI inside Slickteam.
 It is also a support for these medium articles:
-* article1
+* [Integration testing with MongoDB on Gitlab-CI](https://medium.com/slickteam/integration-testing-with-mongodb-on-gitlab-ci-15eda2d293e1)
 * article2
 
 
