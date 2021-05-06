@@ -67,6 +67,7 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+        finalizedBy("jacocoTestReport")
     }
 
     withType<Jar> {
@@ -75,6 +76,16 @@ tasks {
         }
 
         from(configurations.runtime.get().map { if (it.isDirectory) it else zipTree(it) })
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.isEnabled = true
+            csv.isEnabled = false
+            html.destination = file("${buildDir}/jacocoHtml")
+            xml.destination = file("${buildDir}/reports/jacoco.xml")
+        }
+        executionData.setFrom(fileTree(buildDir).include("/jacoco/test.exec"))
     }
 
 }
@@ -93,4 +104,8 @@ jib {
         workingDirectory = "/usr/share/javalin/"
         ports = listOf("7000")
     }
+}
+
+jacoco {
+    toolVersion = "0.8.5"
 }

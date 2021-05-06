@@ -1,4 +1,4 @@
-image: openjdk:11.0.6-jdk
+image: openjdk:11-jdk
 
 stages:
   - build
@@ -32,7 +32,9 @@ unit_test:
   artifacts:
     when: always
     paths:
+      - build/jacocoHtml
       - build/reports
+      - build/jacoco/test.exec
     expire_in: 60 days
     reports:
       junit: build/test-results/test/TEST-*.xml
@@ -40,15 +42,25 @@ unit_test:
 
 IT_test:
   stage: IT_test
+  # dependency to unit_test to get artifact from this step
+  dependencies:
+    - unit_test
   services:
     - name: YOUR_REPO/gitlabciittests-mongo-testing:latest
       alias: mongo
   script:
+    - mv build/jacoco/test.exec build/jacoco/unittest.exec
+    - mv build/reports/jacoco.xml build/reports/unit_jacoco.xml
     - ./gradlew :test --tests "fr.slickteam.gitlabciittests.**TestIT"
+    - cat build/jacocoHtml/index.html | grep -o 'Total[^%]*%'
   allow_failure: true
   timeout: 10m
   artifacts:
     when: always
+    paths:
+      - build/jacocoHtml
+      - build/reports
+      - build/jacoco/*.exec
     expire_in: 60 days
     reports:
       junit: build/test-results/test/TEST-*.xml
