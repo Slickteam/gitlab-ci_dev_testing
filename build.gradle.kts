@@ -7,9 +7,9 @@ val fuel_version: String by project
 plugins {
     application
     jacoco
-    kotlin("jvm") version "1.4.10"
-    id("io.gitlab.arturbosch.detekt") version "1.7.0"
-    id("com.google.cloud.tools.jib") version "2.2.0"
+    kotlin("jvm") version "1.4.32"
+    id("io.gitlab.arturbosch.detekt") version "1.16.0"
+    id("com.google.cloud.tools.jib") version "3.0.0"
 }
 
 group = "fr.slickteam.gitlabciittests"
